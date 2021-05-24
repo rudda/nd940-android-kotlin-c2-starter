@@ -26,7 +26,9 @@ fun bindDetailsStatusImage(imageView: ImageView, isHazardous: Boolean) {
 fun bindTextViewToAstronomicalUnit(textView: TextView, number: Double) {
     val context = textView.context
     textView.text = String.format(context.getString(R.string.astronomical_unit_format), number)
+    textView.contentDescription = String.format(context.getString(R.string.astronomical_unit_format), number)
 }
+
 
 @BindingAdapter("kmUnitText")
 fun bindTextViewToKmUnit(textView: TextView, number: Double) {
@@ -38,4 +40,6 @@ fun bindTextViewToKmUnit(textView: TextView, number: Double) {
 fun bindTextViewToDisplayVelocity(textView: TextView, number: Double) {
     val context = textView.context
     textView.text = String.format(context.getString(R.string.km_s_unit_format), number)
+    textView.contentDescription = String.format(context.getString(R.string.km_s_unit_format), number)
 }
+
