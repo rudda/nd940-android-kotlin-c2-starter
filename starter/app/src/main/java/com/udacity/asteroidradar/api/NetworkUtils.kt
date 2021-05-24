@@ -1,19 +1,23 @@
 package com.udacity.asteroidradar.api
 
-import com.udacity.asteroidradar.Asteroid
+import android.util.Log
+import com.udacity.asteroidradar.data.AsteroidDatabase
 import com.udacity.asteroidradar.Constants
 import org.json.JSONObject
+import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-fun parseAsteroidsJsonResult(jsonResult: JSONObject): ArrayList<Asteroid> {
+fun parseAsteroidsJsonResult(jsonResult: JSONObject): ArrayList<AsteroidDatabase> {
     val nearEarthObjectsJson = jsonResult.getJSONObject("near_earth_objects")
 
-    val asteroidList = ArrayList<Asteroid>()
+    val asteroidList = ArrayList<AsteroidDatabase>()
 
     val nextSevenDaysFormattedDates = getNextSevenDaysFormattedDates()
     for (formattedDate in nextSevenDaysFormattedDates) {
+        try{
+            Log.i("parser", formattedDate)
         val dateAsteroidJsonArray = nearEarthObjectsJson.getJSONArray(formattedDate)
 
         for (i in 0 until dateAsteroidJsonArray.length()) {
@@ -33,12 +37,15 @@ fun parseAsteroidsJsonResult(jsonResult: JSONObject): ArrayList<Asteroid> {
             val isPotentiallyHazardous = asteroidJson
                 .getBoolean("is_potentially_hazardous_asteroid")
 
-            val asteroid = Asteroid(id, codename, formattedDate, absoluteMagnitude,
+            val asteroid = AsteroidDatabase(id, codename, formattedDate, absoluteMagnitude,
                 estimatedDiameter, relativeVelocity, distanceFromEarth, isPotentiallyHazardous)
             asteroidList.add(asteroid)
+            }
+        }catch (error: Exception) {
+            Log.d("error", error.message.toString())
         }
     }
-
+    Log.i("parser", asteroidList.size.toString())
     return asteroidList
 }
 
@@ -55,3 +62,4 @@ private fun getNextSevenDaysFormattedDates(): ArrayList<String> {
 
     return formattedDateList
 }
+
